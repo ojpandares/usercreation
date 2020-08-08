@@ -18,6 +18,7 @@ import java.util.List;
 public class User {
     private String name;
     private String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
     private List<Phone> phones;
     private Timestamp created;
@@ -26,7 +27,8 @@ public class User {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Timestamp lastLogin;
     @JsonProperty(value = "isactive")
-    private Boolean isActive;
+    private boolean isActive;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String token;
+
 }

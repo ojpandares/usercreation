@@ -1,8 +1,6 @@
 package com.opandares.user.app;
 
-import com.opandares.user.domain.exception.InvalidEmailException;
-import com.opandares.user.domain.exception.InvalidFormatException;
-import com.opandares.user.domain.exception.UserExistException;
+import com.opandares.user.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +34,22 @@ public class AppExceptionAdvice {
         Map<String,String> map = new HashMap<>();
         map.put("mensaje","Formato password incorrecto");
         return new ResponseEntity<>(map,HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handlerUserNotFoundException(){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("mensaje","Usuario no encontrado");
+        return new ResponseEntity<>(map,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = PasswordNotMatchException.class)
+    public ResponseEntity<Map<String,String>> handlerPasswordNotMatchException(){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("mensaje","Password incorrecto");
+        return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 
 }

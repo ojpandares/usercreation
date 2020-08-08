@@ -3,10 +3,7 @@ package com.opandares.user.infrastructure.controller;
 import com.opandares.user.domain.model.user.User;
 import com.opandares.user.domain.usescase.user.UserUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +16,11 @@ public class UserController {
     public User save(@RequestBody User user){
 
         return userUseCase.createUser(user);
+    }
+
+    @PutMapping
+    public User updateUser(@RequestBody User user){
+
+        return userUseCase.updateUser(user);
     }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -27,6 +28,10 @@ public class UserEntity {
     private Timestamp created;
     private Timestamp modified;
     private Timestamp lastLogin;
-    private Boolean isActive;
+    private boolean isActive;
     private String token;
+
+    public String setPhonesFromList(List<String> phones){
+        return null;
+    }
 }
