@@ -2,6 +2,7 @@ package com.opandares.user.domain.usescase.login;
 
 import com.opandares.user.domain.exception.BusinessException;
 import com.opandares.user.domain.exception.InvalidEmailException;
+import com.opandares.user.domain.exception.UserIsNullExeption;
 import com.opandares.user.domain.gateway.UserGateway;
 import com.opandares.user.domain.model.user.LoginRequest;
 import com.opandares.user.domain.model.user.User;
@@ -23,6 +24,9 @@ public class LoginUseCase {
     }
 
     private void validate(LoginRequest loginRequest){
+
+        if (Objects.isNull(loginRequest))
+            throw new UserIsNullExeption();
 
         if (!userGateway.validEmail(loginRequest.getEmail()))
             throw new InvalidEmailException();

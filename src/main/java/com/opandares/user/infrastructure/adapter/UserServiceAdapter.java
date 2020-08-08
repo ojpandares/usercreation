@@ -1,9 +1,7 @@
 package com.opandares.user.infrastructure.adapter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opandares.user.domain.exception.TechnicalException;
-import com.opandares.user.domain.exception.UserExistException;
-import com.opandares.user.domain.exception.UserNotFoundException;
+import com.opandares.user.domain.exception.*;
 import com.opandares.user.domain.gateway.AuthenticationGateway;
 import com.opandares.user.domain.gateway.UserGateway;
 import com.opandares.user.domain.model.user.User;
@@ -13,6 +11,7 @@ import com.opandares.user.infrastructure.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Optional;
@@ -50,37 +49,51 @@ public class UserServiceAdapter implements UserGateway {
         return userMapper.toModel(userRepository.save(userMapper.toEntity(user)));
     }
 
+    @Transactional
     public User updateUser(User user){
 
-        UserEntity userEntity = userRepository.findByEmail(user.getEmail());
 
+
+        /*UserEntity userEntity = userRepository.findById(entity.getId()).get();
+
+        logger.info("userId: {}",userEntity.getId());
         if (Objects.isNull(userEntity))
             return null;
 
-        logger.info("User {}",user);
+        logger.info("User {}",userEntity);
         userEntity.setActive(user.isActive());
         userEntity.setModified(new Timestamp(System.currentTimeMillis()));
         userEntity.setName(user.getName());
-        userEntity.setPassword(user.getPassword());
+        userEntity.setPassword(user.getPassword());*/
         try {
-            userEntity.setPhones(objectMapper.writeValueAsString(user.getPhones()));
+           // userEntity.setPhones(objectMapper.writeValueAsString(user.getPhones()));
+            String phones = objectMapper.writeValueAsString(user.getPhones());
+             int count =  userRepository.updateUser(user.getEmail(),user.isActive(),new Timestamp(System.currentTimeMillis()),user.getName(),
+                                        user.getPassword(),phones);
+             logger.info("count: {}", count);
+             if ( count == 0 ) {
+                 return userMapper.toModel(userRepository.findByEmail(user.getEmail()));
+             }
+            return user;
         }catch(Exception e){
-            throw new RuntimeException("Formato telefono incorrecto");
+            throw new PhoneException();
         }
 
-        return userMapper.toModel(userRepository.save(userMapper.toEntity(user)));
+        //return userMapper.toModel(userRepository.save(userMapper.toEntity(user)));
     }
 
     @Override
     public User authenticate(String email, String password) {
 
+        logger.info("email: {}",email);
+        logger.info("password: {}",password);
         UserEntity entity = userRepository.findByEmail(email);
 
         if(Objects.isNull(entity))
             throw new UserNotFoundException();
 
         if (!entity.getPassword().equals(password))
-            throw new TechnicalException();
+            throw new PasswordNotMatchException();
 
         return userMapper.toModel(entity);
     }

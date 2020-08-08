@@ -16,7 +16,7 @@ public class AppExceptionAdvice {
     public ResponseEntity<Map<String,String>> handlerUserExistException(UserExistException userExistException){
 
         Map<String,String> map = new HashMap<>();
-        map.put("mensaje","El correo ya registrado");
+        map.put("mensaje","User already registered");
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
@@ -24,7 +24,7 @@ public class AppExceptionAdvice {
     public  ResponseEntity<Map<String,String>> handlerInvalidEmailException(){
 
         Map<String,String> map = new HashMap<>();
-        map.put("mensaje","Formato email incorrecto");
+        map.put("message","Incorrect email format");
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 
@@ -32,7 +32,7 @@ public class AppExceptionAdvice {
     public ResponseEntity<Map<String,String>> handlerInvalidFormatException(){
 
         Map<String,String> map = new HashMap<>();
-        map.put("mensaje","Formato password incorrecto");
+        map.put("message","Incorrect password format");
         return new ResponseEntity<>(map,HttpStatus.BAD_GATEWAY);
     }
 
@@ -40,7 +40,15 @@ public class AppExceptionAdvice {
     public ResponseEntity<Map<String,String>> handlerUserNotFoundException(){
 
         Map<String,String> map = new HashMap<>();
-        map.put("mensaje","Usuario no encontrado");
+        map.put("message","User not found");
+        return new ResponseEntity<>(map,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = UserIsNullExeption.class)
+    public ResponseEntity<Map<String,String>> handlerUserIsNullExeption(){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("message","User null");
         return new ResponseEntity<>(map,HttpStatus.NOT_FOUND);
     }
 
@@ -48,7 +56,15 @@ public class AppExceptionAdvice {
     public ResponseEntity<Map<String,String>> handlerPasswordNotMatchException(){
 
         Map<String,String> map = new HashMap<>();
-        map.put("mensaje","Password incorrecto");
+        map.put("message","Wrong password");
+        return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = PhoneException.class)
+    public ResponseEntity<Map<String,String>> handlerPhoneException(){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("message","Phones could not be processed");
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 

@@ -2,6 +2,7 @@ package com.opandares.user.infrastructure.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opandares.user.domain.exception.PhoneException;
 import com.opandares.user.domain.model.user.User;
 import com.opandares.user.infrastructure.entity.user.UserEntity;
 import com.opandares.user.infrastructure.mapper.UserMapper;
@@ -33,24 +34,25 @@ public class UserMapperAdapter implements UserMapper {
                     .token(user.getToken())
                     .build();
         }catch (JsonProcessingException e){
-            throw new RuntimeException("Phones could not be processed");
+            throw new PhoneException();
         }
     }
 
     public User toModel(UserEntity userEntity){
         try {
-
             return User.builder()
                     .name(userEntity.getName())
                     .email(userEntity.getEmail())
+                    .password(userEntity.getPassword())
                     .phones(objectMapper.readValue(userEntity.getPhones(), ArrayList.class))
                     .created(Optional.ofNullable(userEntity.getCreated()).orElse(new Timestamp(System.currentTimeMillis())))
                     .modified(Optional.ofNullable(userEntity.getModified()).orElse(new Timestamp(System.currentTimeMillis())))
                     .lastLogin(Optional.ofNullable(userEntity.getLastLogin()).orElse(new Timestamp(System.currentTimeMillis())))
                     .isActive(true)
-                    .token(userEntity.getToken()).build();
+                    .token(userEntity.getToken())
+                    .build();
         }catch(JsonProcessingException e){
-            throw new RuntimeException("Phones could not be processed");
+            throw new PhoneException();
         }
     }
 }
