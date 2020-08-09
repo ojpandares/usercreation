@@ -27,7 +27,8 @@ public class UserServiceAdapter implements UserGateway {
     private final AuthenticationGateway authenticationGateway;
     private final ObjectMapper objectMapper;
 
-    public UserServiceAdapter(UserRepository userRepository, UserMapper userMapper, AuthenticationGateway authenticationGateway,
+    public UserServiceAdapter(UserRepository userRepository, UserMapper userMapper,
+                              AuthenticationGateway authenticationGateway,
                               ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -36,65 +37,42 @@ public class UserServiceAdapter implements UserGateway {
     }
 
     public User createdUser(User user){
-
         UserEntity userEntity = userRepository.findByEmail(user.getEmail());
-
         if (Objects.nonNull(userEntity))
             return null;
-
         Optional.ofNullable(user.getEmail())
                 .map(authenticationGateway::authorize)
                 .ifPresent(user::setToken);
-
         return userMapper.toModel(userRepository.save(userMapper.toEntity(user)));
     }
 
     @Transactional
     public User updateUser(User user){
-
-
-
-        /*UserEntity userEntity = userRepository.findById(entity.getId()).get();
-
-        logger.info("userId: {}",userEntity.getId());
-        if (Objects.isNull(userEntity))
-            return null;
-
-        logger.info("User {}",userEntity);
-        userEntity.setActive(user.isActive());
-        userEntity.setModified(new Timestamp(System.currentTimeMillis()));
-        userEntity.setName(user.getName());
-        userEntity.setPassword(user.getPassword());*/
         try {
-           // userEntity.setPhones(objectMapper.writeValueAsString(user.getPhones()));
             String phones = objectMapper.writeValueAsString(user.getPhones());
-             int count =  userRepository.updateUser(user.getEmail(),user.isActive(),new Timestamp(System.currentTimeMillis()),user.getName(),
-                                        user.getPassword(),phones);
-             logger.info("count: {}", count);
-             if ( count == 0 ) {
+             int count =  userRepository.updateUser(user.getEmail(),
+                                                    user.isActive(),
+                                                    new Timestamp(System.currentTimeMillis()),
+                                                    user.getName(),
+                                                    user.getPassword(),phones);
+             if ( count == 1 ) {
                  return userMapper.toModel(userRepository.findByEmail(user.getEmail()));
              }
-            return user;
+            return null;
         }catch(Exception e){
             throw new PhoneException();
         }
-
-        //return userMapper.toModel(userRepository.save(userMapper.toEntity(user)));
     }
 
     @Override
     public User authenticate(String email, String password) {
-
         logger.info("email: {}",email);
         logger.info("password: {}",password);
         UserEntity entity = userRepository.findByEmail(email);
-
         if(Objects.isNull(entity))
             throw new UserNotFoundException();
-
         if (!entity.getPassword().equals(password))
             throw new PasswordNotMatchException();
-
         return userMapper.toModel(entity);
     }
 

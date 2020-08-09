@@ -41,6 +41,7 @@ public class UserMapperAdapter implements UserMapper {
     public User toModel(UserEntity userEntity){
         try {
             return User.builder()
+                    .id(userEntity.getId())
                     .name(userEntity.getName())
                     .email(userEntity.getEmail())
                     .password(userEntity.getPassword())
@@ -48,8 +49,8 @@ public class UserMapperAdapter implements UserMapper {
                     .created(Optional.ofNullable(userEntity.getCreated()).orElse(new Timestamp(System.currentTimeMillis())))
                     .modified(Optional.ofNullable(userEntity.getModified()).orElse(new Timestamp(System.currentTimeMillis())))
                     .lastLogin(Optional.ofNullable(userEntity.getLastLogin()).orElse(new Timestamp(System.currentTimeMillis())))
-                    .isActive(true)
                     .token(userEntity.getToken())
+                    .isActive(true)
                     .build();
         }catch(JsonProcessingException e){
             throw new PhoneException();

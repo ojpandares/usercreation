@@ -17,13 +17,11 @@ public class UserController {
 
     @PostMapping
     public User save(@RequestBody User user){
-
         return userUseCase.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user){
-
         logger.info("User to update {}",user);
         return userUseCase.updateUser(user);
     }

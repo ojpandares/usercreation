@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +15,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ToString
 public class User {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private UUID id;
     private String name;
     private String email;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,9 +27,9 @@ public class User {
     @JsonProperty(value = "last_login")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Timestamp lastLogin;
-    @JsonProperty(value = "isactive")
-    private boolean isActive;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String token;
+    @JsonProperty(value = "isactive")
+    private boolean isActive;
 
 }
