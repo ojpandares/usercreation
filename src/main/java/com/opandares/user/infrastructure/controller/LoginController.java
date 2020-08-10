@@ -3,7 +3,6 @@ package com.opandares.user.infrastructure.controller;
 import com.opandares.user.domain.model.user.LoginRequest;
 import com.opandares.user.domain.model.user.User;
 import com.opandares.user.domain.usescase.login.LoginUseCase;
-import com.opandares.user.infrastructure.adapter.UserServiceAdapter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

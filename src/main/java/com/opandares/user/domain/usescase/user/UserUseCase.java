@@ -6,7 +6,6 @@ import com.opandares.user.domain.exception.UserExistException;
 import com.opandares.user.domain.exception.UserNotFoundException;
 import com.opandares.user.domain.gateway.UserGateway;
 import com.opandares.user.domain.model.user.User;
-import com.opandares.user.infrastructure.adapter.UserServiceAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
